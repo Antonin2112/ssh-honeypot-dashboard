@@ -1,0 +1,110 @@
+
+
+services:
+  db1:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - db1_data:/var/lib/postgresql/data
+    networks:
+      - backend1-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s            # Vérifie toutes les 10 secondes
+      timeout: 5s              # Attend max 5 secondes
+      retries: 5               # Abandonne après 5 échecs
+  db2:
+    image: mongo:6.0
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+    volumes:
+      - db2_data:/data/db
+    networks:
+      - backend2-net
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s            # Vérifie toutes les 10 secondes
+      timeout: 5s              # Attend max 5 secondes
+      retries: 5               # Abandonne après 5 échecs
+  
+
+  api1:
+    build:
+      context: ./api1
+      dockerfile: Dockerfile
+    depends_on:
+      db1: 
+        condition: service_healthy
+    ports:
+      - "4001:4001"
+    environment:
+      DB_HOST: db1
+      DB_PORT: 5432
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_NAME: ${POSTGRES_DB}
+    networks:
+      - backend1-net
+      - frontend-net
+  api2:
+    build:
+      context: ./api2
+      dockerfile: Dockerfile
+    depends_on:
+      db2: 
+        condition: service_healthy
+    ports:
+      - "4002:4002"
+    environment:
+      DB_HOST: db2
+      DB_PORT: 27017
+      DB_USER: ${MONGO_INITDB_ROOT_USERNAME}
+      DB_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      DB_NAME: ${MONGO_INITDB_DATABASE}
+    networks:
+      - backend2-net
+      - frontend-net
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      api1:
+        condition: service_healthy
+      api2:
+        condition: service_healthy
+    networks:
+      - frontend-net 
+    volumes:
+      - ./frontend/src:/app/src
+    environment:
+      VITE_API1_URL: http://api1:4001
+      VITE_API2_URL: http://api2:4002
+  
+  cowrie:
+    image: cowrie/cowrie:sha-e3f1f74
+    ports:
+      - "2222:2222"
+      - "2323:2323"
+    volumes:
+      - cowrie-logs:/cowrie/var/log/cowrie
+    networks:
+      - backend1-net
+
+
+volumes:
+  db1_data:
+  db2_data:
+  cowrie-logs: 
+
+networks:
+  backend1-net:
+  backend2-net:
+  frontend-net: 
