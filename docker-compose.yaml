@@ -48,6 +48,8 @@ services:
       DB_USER: ${POSTGRES_USER}
       DB_PASSWORD: ${POSTGRES_PASSWORD}
       DB_NAME: ${POSTGRES_DB}
+    volumes:
+      - cowrie-logs:/cowrie/var/log/cowrie
     networks:
       - backend1-net
       - frontend-net
@@ -94,7 +96,8 @@ services:
       - "2222:2222"
       - "2323:2323"
     volumes:
-      - cowrie-logs:/cowrie/var/log/cowrie
+      - cowrie-logs:/cowrie/cowrie-git/var/log/cowrie
+      - ./cowrie/cowrie.cfg:/cowrie/cowrie-git/etc/cowrie.cfg
     networks:
       - backend1-net
 
