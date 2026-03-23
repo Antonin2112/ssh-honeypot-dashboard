@@ -1,4 +1,4 @@
-export default function StatsCards({ events, alerts }) {
+export default function StatsCards({ events = [], alerts = [] }) {
   const totalAttacks = events.length
 
   const uniqueIPs = new Set(events.map(e => e.ip).filter(Boolean)).size
