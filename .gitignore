@@ -1,2 +1,6 @@
 .env
 node_modules/
+.vs/
+*.sqlite
+ProjectSettings.json
+VSWorkspaceState.json
