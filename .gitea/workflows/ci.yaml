@@ -23,16 +23,16 @@ jobs:
           sudo apt-get install -y trivy
 
       - name: Build images
-        run: docker compose build
+        run: docker compose -p cyberwatch build
 
       - name: Scan api1
-        run: trivy image --exit-code 1 --severity MEDIUM,HIGH,CRITICAL final_project-api1
+        run: trivy image --exit-code 1 --severity MEDIUM,HIGH,CRITICAL cyberwatch-api1
 
       - name: Scan api2
-        run: trivy image --exit-code 1 --severity MEDIUM,HIGH,CRITICAL final_project-api2
+        run: trivy image --exit-code 1 --severity MEDIUM,HIGH,CRITICAL cyberwatch-api2
 
       - name: Scan frontend
-        run: trivy image --exit-code 1 --severity MEDIUM,HIGH,CRITICAL final_project-frontend
+        run: trivy image --exit-code 1 --severity MEDIUM,HIGH,CRITICAL cyberwatch-frontend
 
   build-and-push:
     name: Build and Push
