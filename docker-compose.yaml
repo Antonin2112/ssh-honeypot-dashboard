@@ -89,12 +89,13 @@ services:
     volumes:
       - ./frontend/src/src:/app/src
     environment:
-      VITE_API1_URL: http://localhost:4001
-      VITE_API2_URL: http://localhost:4002
+      VITE_API1_URL: ${VITE_API1_URL}
+      VITE_API2_URL: ${VITE_API2_URL}
   
   cowrie:
     image: cowrie/cowrie:sha-e3f1f74
     ports:
+      - "22:2222"
       - "2222:2222"
       - "2323:2323"
     volumes:
