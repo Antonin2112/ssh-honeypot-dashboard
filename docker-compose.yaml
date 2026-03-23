@@ -89,8 +89,8 @@ services:
     volumes:
       - ./frontend/src/src:/app/src
     environment:
-      VITE_API1_URL: http://164.92.240.36:4001
-      VITE_API2_URL: http://164.92.240.36:4002
+      VITE_API1_URL: ${VITE_API1_URL}
+      VITE_API2_URL: ${VITE_API2_URL}
   
   cowrie:
     image: cowrie/cowrie:sha-e3f1f74
