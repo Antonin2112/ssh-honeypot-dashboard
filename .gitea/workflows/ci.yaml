@@ -14,32 +14,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Build images for scanning
+      - name: Install Trivy
+        run: |
+          wget -qO- https://github.com/aquasecurity/trivy/releases/download/v0.69.1/trivy_0.69.1_Linux-64bit.tar.gz | tar xz
+          sudo mv trivy /usr/local/bin/
+
+      - name: Build images
         run: docker compose build
 
       - name: Scan api1
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: final_project-api1
-          format: table
-          exit-code: 1
-          severity: MEDIUM,HIGH,CRITICAL
+        run: trivy image --exit-code 1 --severity MEDIUM,HIGH,CRITICAL final_project-api1
 
       - name: Scan api2
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: final_project-api2
-          format: table
-          exit-code: 1
-          severity: MEDIUM,HIGH,CRITICAL
+        run: trivy image --exit-code 1 --severity MEDIUM,HIGH,CRITICAL final_project-api2
 
       - name: Scan frontend
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: final_project-frontend
-          format: table
-          exit-code: 1
-          severity: MEDIUM,HIGH,CRITICAL
+        run: trivy image --exit-code 1 --severity MEDIUM,HIGH,CRITICAL final_project-frontend
 
   build-and-push:
     name: Build and Push
