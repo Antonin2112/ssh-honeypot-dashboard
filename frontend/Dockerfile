@@ -1,4 +1,5 @@
-FROM node:20-alpine
+#BUILD
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
@@ -6,6 +7,12 @@ COPY src/package*.json .
 
 RUN npm install --legacy-peer-deps
 
+#PROD
+FROM node:20-alpine
+
+WORKDIR /app
+
+COPY --from=builder /app/node_modules ./node_modules
 COPY src/ .
 
 RUN chown -R node:node /app
