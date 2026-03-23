@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY src/package*.json .
 
-RUN npm ci
+RUN npm install --legacy-peer-deps
 
 COPY src/ .
 
@@ -14,6 +14,6 @@ USER node
 HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
   CMD wget --quiet --tries=1 --spider http://localhost:5173 || exit 1
 
-EXPOSE 3000
+EXPOSE 5173
 
 CMD ["npm", "run", "dev"] 

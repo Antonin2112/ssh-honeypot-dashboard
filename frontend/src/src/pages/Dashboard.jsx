@@ -7,10 +7,8 @@ export default function Dashboard({ events, alerts }) {
   return (
     <div className="flex flex-col gap-4">
       <StatsCards events={events} alerts={alerts} />
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <AttacksChart events={events} />
-        <WorldMap alerts={alerts} />
-      </div>
+      <WorldMap alerts={alerts} />
+      <AttacksChart events={events} />
       <EventsFeed events={events} />
     </div>
   )
