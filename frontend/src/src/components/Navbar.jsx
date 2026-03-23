@@ -11,7 +11,7 @@ export default function Navbar() {
           to="/"
           end
           className={({ isActive }) =>
-            btn btn-sm ${isActive ? 'btn-primary' : 'btn-ghost'}
+            `btn btn-sm ${isActive ? 'btn-primary' : 'btn-ghost'}`
           }
         >
           Dashboard
@@ -19,7 +19,7 @@ export default function Navbar() {
         <NavLink
           to="/analysis"
           className={({ isActive }) =>
-            btn btn-sm ${isActive ? 'btn-primary' : 'btn-ghost'}
+            `btn btn-sm ${isActive ? 'btn-primary' : 'btn-ghost'}`
           }
         >
           Analysis
