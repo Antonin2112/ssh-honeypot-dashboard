@@ -26,14 +26,13 @@ jobs:
         run: docker compose -p cyberwatch build
 
       - name: Scan api1
-        run: trivy image --exit-code 1 --severity MEDIUM,HIGH,CRITICAL --skip-dirs /usr/local/lib/node_modules/npm --ignorefile .trivyignore cyberwatch-api1
+        run: trivy image --exit-code 1 --severity MEDIUM,HIGH,CRITICAL --skip-dirs /usr/local/lib/node_modules/npm --ignorefile ${{ github.workspace }}/.trivyignore cyberwatch-api1
 
       - name: Scan api2
-        run: trivy image --exit-code 1 --severity MEDIUM,HIGH,CRITICAL --skip-dirs /usr/local/lib/node_modules/npm --ignorefile .trivyignore cyberwatch-api2
+        run: trivy image --exit-code 1 --severity MEDIUM,HIGH,CRITICAL --skip-dirs /usr/local/lib/node_modules/npm --ignorefile ${{ github.workspace }}/.trivyignore cyberwatch-api2
 
       - name: Scan frontend
-        run: trivy image --exit-code 1 --severity MEDIUM,HIGH,CRITICAL --skip-dirs /usr/local/lib/node_modules/npm --ignorefile .trivyignore cyberwatch-frontend
-
+        run: trivy image --exit-code 1 --severity MEDIUM,HIGH,CRITICAL --skip-dirs /usr/local/lib/node_modules/npm --ignorefile ${{ github.workspace }}/.trivyignore cyberwatch-frontend
   build-and-push:
     name: Build and Push
     runs-on: ubuntu-latest
