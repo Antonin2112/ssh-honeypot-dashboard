@@ -1,15 +1,10 @@
-export default function StatsCards({ events = [], alerts = [] }) {
+export default function StatsCards({ events = [], alerts = [], activeSessions = 0 }) {
   const totalAttacks = events.length
 
   const uniqueIPs = new Set(events.map(e => e.ip).filter(Boolean)).size
 
   const maliciousIPs = alerts.filter(a => a.isMalicious).length
 
-  const activeSessions = (() => {
-    const connects = events.filter(e => e.event_type === 'cowrie.session.connect').length
-    const closed = events.filter(e => e.event_type === 'cowrie.session.closed').length
-    return Math.max(0, connects - closed)
-  })()
 
   return (
     <div className="stats stats-horizontal shadow w-full">

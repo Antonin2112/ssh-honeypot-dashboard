@@ -5,7 +5,7 @@ import Dashboard from './pages/Dashboard'
 import Analysis from './pages/Analysis'
 
 export default function App() {
-  const { events, alerts } = useData()
+  const { events, alerts, activeSessions } = useData()
 
   return (
     <BrowserRouter>
@@ -13,7 +13,7 @@ export default function App() {
         <Navbar />
         <div className="container mx-auto p-4">
           <Routes>
-            <Route path="/" element={<Dashboard events={events} alerts={alerts} />} />
+            <Route path="/" element={<Dashboard events={events} alerts={alerts} activeSessions={activeSessions}/>} />
             <Route path="/analysis" element={<Analysis events={events} alerts={alerts} />} />
           </Routes>
         </div>
