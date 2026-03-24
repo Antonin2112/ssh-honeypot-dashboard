@@ -17,7 +17,7 @@ export default function TopCommands({ events }) {
         <ul className="flex flex-col gap-2">
           {topCommands.map(([command, count]) => (
             <li key={command} className="flex items-center gap-2">
-              <span className="font-mono text-sm w-48 truncate">{command}</span>
+              <span className="font-mono text-xs flex-1 mr-2">{command}</span>
               <progress
                 className="progress progress-accent flex-1"
                 value={count}
