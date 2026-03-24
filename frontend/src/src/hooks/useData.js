@@ -6,12 +6,17 @@ const API2 = import.meta.env.VITE_API2_URL
 export const useData = () => {
   const [events, setEvents] = useState([])
   const [alerts, setAlerts] = useState([])
+  const [activeSessions, setActiveSessions] = useState(0)
 
   const fetchData = async () => {
     try {
       const eventsRes = await fetch(`${API1}/events`)
       const eventsData = await eventsRes.json()
       setEvents(eventsData)
+
+      const activeRes = await fetch(`${API1}/stats/active-sessions`)
+      const activeData = await activeRes.json()
+      setActiveSessions(activeData.active)
 
       const uniqueIps = [...new Set(eventsData.map(e => e.ip).filter(Boolean))]
       for (const ip of uniqueIps) {
@@ -36,5 +41,5 @@ export const useData = () => {
     return () => clearInterval(interval)
   }, [])
 
-  return { events, alerts }
+  return { events, alerts, activeSessions}
 }

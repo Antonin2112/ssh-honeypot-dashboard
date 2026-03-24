@@ -58,6 +58,10 @@ const watchCowrieLogs = () => {
 
     fs.watchFile(logFile, () => {
     const newSize = fs.statSync(logFile).size;
+
+    if (newSize < fileSize) {
+    fileSize = 0;
+    }
     const stream = fs.createReadStream(logFile, { 
         start: fileSize,  // ← on part de là où on s'est arrêté
         end: newSize 
@@ -126,6 +130,19 @@ app.get('/stats/countries', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+app.get('/stats/active-sessions', async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT 
+        (SELECT COUNT(*) FROM events WHERE event_type = 'cowrie.session.connect') -
+        (SELECT COUNT(*) FROM events WHERE event_type = 'cowrie.session.closed') AS active
+    `)
+    res.json({ active: Math.max(0, parseInt(result.rows[0].active)) })
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' })
+  }
+})
 
 // Health check — requis pour le docker-compose depends_on
 app.get('/health', (req, res) => {
