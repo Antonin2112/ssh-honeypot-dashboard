@@ -133,9 +133,3 @@ ssh root@164.92.240.36
 <img width="2610" height="1324" alt="image" src="https://github.com/user-attachments/assets/1efbc5f3-fe9c-4ee4-a5a0-20d4db7fad9f" />
 
 <img width="2392" height="1806" alt="image" src="https://github.com/user-attachments/assets/377032b3-2318-454c-a929-6ac28ba34049" />
-
-
-
-
-
-*(Add screenshots here)*
